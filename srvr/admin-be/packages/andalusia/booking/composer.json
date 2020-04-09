@@ -1,0 +1,11 @@
+{
+  "name": "andalusia/booking",
+  "description": "booking package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mahmood Ahmad"
+    }
+  ],
+  "require": {}
+}
