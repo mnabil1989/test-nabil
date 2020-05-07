@@ -1,0 +1,3907 @@
+openapi: 3.0.0
+info:
+  title: 'Admin Backend'
+  description: 'Admin Backend Description'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://admin-apc.dotbeit.com'
+    description: 'Admin Backend'
+paths:
+  /api/videoAppointment:
+    post:
+      tags:
+        - 'Appointment video call'
+      summary: 'Appointment service video details'
+      operationId: 'App\Http\Controllers\Api\AgoraVideoController::videoAppointment'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - appointment_id
+              properties:
+                appointment_id:
+                  description: required
+                  type: number
+                  example: '1'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/appointments/freetime:
+    get:
+      tags:
+        - 'Appointment (Working Hours)'
+      summary: 'Appointment service (deprecated)'
+      operationId: 'App\Http\Controllers\Api\AppointmentController::FreeTime'
+      parameters:
+        -
+          name: slug
+          in: query
+          description: 'doctor slug'
+          required: true
+          schema:
+            type: string
+        -
+          name: time
+          in: query
+          description: 'appointment time'
+          required: true
+          schema:
+            type: string
+          example: 04/31/2020
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/appointments/free_time:
+    get:
+      tags:
+        - 'Appointment (Working Hours)'
+      summary: 'Appointment service'
+      operationId: 'App\Http\Controllers\Api\AppointmentController::free_time'
+      parameters:
+        -
+          name: slug
+          in: query
+          description: 'doctor slug'
+          required: true
+          schema:
+            type: string
+        -
+          name: start_date
+          in: query
+          description: 'the start date ... if not provided the start date will be the current date'
+          required: false
+          schema:
+            type: string
+          example: 04/31/2020
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/appointments:
+    get:
+      tags:
+        - Appointment
+      summary: 'Appointment service'
+      operationId: 'Andalusia\Booking\Controllers\API\AppointmentController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+        -
+          name: doctors
+          in: query
+          description: 'to show the doctor details in the appointment object'
+          required: false
+          schema:
+            type: boolean
+        -
+          name: clinics
+          in: query
+          description: 'to show the clinic details in the appointment object'
+          required: false
+          schema:
+            type: boolean
+        -
+          name: doctor_id
+          in: query
+          description: 'to get the appointments related to the doctor (through doctor id)'
+          required: false
+          schema:
+            type: integer
+        -
+          name: clinic_id
+          in: query
+          description: 'to get the appointments related to the clinic (through clinic id)'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - 'Appointment (Working Hours)'
+      summary: 'Appointment service'
+      operationId: 'App\Http\Controllers\Api\AppointmentController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - slug
+                - start
+              properties:
+                slug:
+                  description: 'doctor slug'
+                  type: string
+                  example: dr-saeed-refaat
+                start:
+                  description: 'the start of the appointment'
+                  type: string
+                  example: '2020-03-30 14:23:00'
+                comments:
+                  description: 'to add a comment for the appointment'
+                  type: string
+                  example: 'hi doctor'
+                attachments:
+                  description: 'the user attachments'
+                  type: array
+                  items:
+                    type: file
+                    example: prescription.png
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  '/api/appointments/{id}/attachments':
+    get:
+      tags:
+        - 'Appointment (Working Hours)'
+      summary: 'Appointment service'
+      operationId: 'App\Http\Controllers\Api\AppointmentController::get_attachments'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'appointment id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+    post:
+      tags:
+        - 'Appointment (Working Hours)'
+      summary: 'Appointment service'
+      operationId: 'App\Http\Controllers\Api\AppointmentController::store_attachments'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'appointment id'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - attachment
+              properties:
+                attachment:
+                  description: 'the attachment (media)'
+                  type: file
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/appointments/mine:
+    get:
+      tags:
+        - 'Appointment (Working Hours)'
+      summary: 'Appointment service'
+      operationId: 'App\Http\Controllers\Api\AppointmentController::mine'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/appointment/note:
+    post:
+      tags:
+        - 'Appointment (Working Hours)'
+      summary: notes
+      operationId: 'App\Http\Controllers\Api\AppointmentController::store_note'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - appointment_id
+                - doctor_id
+                - user_id
+              properties:
+                appointment_id:
+                  description: required
+                  type: integer
+                  example: '1'
+                doctor_id:
+                  description: required
+                  type: integer
+                  example: '1'
+                user_id:
+                  description: required
+                  type: integer
+                  example: '1'
+                created_by:
+                  description: Doctor|patient
+                  type: text
+                  example: Doctor
+                note:
+                  description: required
+                  type: text
+                  example: '1'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{data}':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+  /api/login:
+    post:
+      tags:
+        - Authorization
+      summary: 'User Login'
+      operationId: 'App\Http\Controllers\Api\AuthController::authenticate'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: 'required|string|email|max:255'
+                  type: string
+                  example: user@user.com
+                password:
+                  description: 'required|string|min:6'
+                  type: string
+                  example: '123123'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'token:':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: invalid_credentials
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+        401:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+  /api/check-email:
+    post:
+      tags:
+        - Authorization
+      summary: 'User Check Email'
+      operationId: 'App\Http\Controllers\Api\AuthController::check_if_email_exists'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+              properties:
+                email:
+                  description: 'required|string|email|max:255'
+                  type: string
+                  example: user@user.com
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    description: 'The email'
+                    type: string
+                type: object
+        401:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+  /api/register:
+    post:
+      tags:
+        - Authorization
+      summary: 'User Registration'
+      operationId: 'App\Http\Controllers\Api\AuthController::register'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - phone
+                - email
+                - password
+                - password_confirmation
+              properties:
+                name:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: user
+                last_name:
+                  description: 'string|max:255'
+                  type: string
+                  example: Last
+                phone:
+                  description: '[''required'',''regex:/^(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'']'
+                  type: integer
+                  example: '1234567'
+                address:
+                  description: 'string|max:255'
+                  type: string
+                  example: 'Andalusia Group, 9 Mohamed Baidar St. from ElNasr St., New Maadi, Cairo, Egypt.'
+                gender:
+                  description: 'string|max:20'
+                  type: string
+                  example: 'Male,Female'
+                avatar:
+                  description: 'image|mimes:jpeg,png,jpg,gif,svg|max:1024'
+                  type: file
+                  example: 'File Image'
+                email:
+                  description: 'required|string|email|max:255|unique:users'
+                  type: string
+                  example: user@user.com
+                password:
+                  description: 'required|string|min:6|confirmed'
+                  type: string
+                  example: '123123'
+                password_confirmation:
+                  description: 'Same As Password'
+                  type: string
+                  example: '123123'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{name,email,updated_at,created_at,id},token}':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+  /api/doctor/login:
+    post:
+      tags:
+        - 'Doctor Authorization'
+      summary: 'Doctor Login'
+      operationId: 'App\Http\Controllers\Api\AuthController::Doctor_authenticate'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: 'required|string|email|max:255'
+                  type: string
+                  example: user@user.com
+                password:
+                  description: 'required|string|min:6'
+                  type: string
+                  example: '123123'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'token:':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: invalid_credentials
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+        401:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+  /api/doctor/register:
+    post:
+      tags:
+        - 'Doctor Authorization'
+      summary: 'doctor Registration'
+      operationId: 'App\Http\Controllers\Api\AuthController::Doctor_register'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - phone
+                - email
+                - password
+                - password_confirmation
+              properties:
+                phone:
+                  description: '[''required'',''regex:/^(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'']'
+                  type: integer
+                  example: '5123456'
+                email:
+                  description: 'required|string|email|max:255|unique:users'
+                  type: string
+                  example: doctor@doctor.com
+                password:
+                  description: 'required|string|min:6|confirmed'
+                  type: string
+                  example: '123123'
+                password_confirmation:
+                  description: 'Same As Password'
+                  type: string
+                  example: '123123'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{name,email,updated_at,created_at,id},token}':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+  /api/doctor/me:
+    get:
+      tags:
+        - 'Doctor Authorization'
+      summary: 'User Data'
+      operationId: 'App\Http\Controllers\Api\AuthController::getAuthenticatedDoctor'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{name,email,updated_at,created_at,id},token}':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/update-profile-password:
+    put:
+      tags:
+        - Authorization
+      summary: 'User Update Profile Password'
+      operationId: 'App\Http\Controllers\Api\AuthController::updateProfilePassword'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - phone
+                - email
+              properties:
+                current_password:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: '123123'
+                new_password:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: '12341234'
+                new_password_confirmation:
+                  description: 'Same As Password'
+                  type: string
+                  example: '12341234'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/update-profile:
+    put:
+      tags:
+        - Authorization
+      summary: 'User Update Profile Data'
+      operationId: 'App\Http\Controllers\Api\AuthController::updateProfile'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - phone
+                - email
+              properties:
+                name:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: user
+                last_name:
+                  description: 'string|max:255'
+                  type: string
+                  example: Last
+                phone:
+                  description: '[''required'',''regex:/^(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'']'
+                  type: integer
+                  example: '1234567'
+                address:
+                  description: 'string|max:255'
+                  type: string
+                  example: 'Andalusia Group, 9 Mohamed Baidar St. from ElNasr St., New Maadi, Cairo, Egypt.'
+                gender:
+                  description: 'string|max:20'
+                  type: string
+                  example: Male
+                email:
+                  description: 'required|string|email|max:255|unique:users'
+                  type: string
+                  example: user@user.com
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/update-profile-image:
+    post:
+      tags:
+        - Authorization
+      summary: 'User Update Profile Image'
+      operationId: 'App\Http\Controllers\Api\AuthController::updateProfileImage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - Image
+              properties:
+                avatar:
+                  description: 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024'
+                  type: file
+                  example: 'File Image'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/social-login:
+    post:
+      tags:
+        - Authorization
+      summary: 'User social Login'
+      operationId: 'App\Http\Controllers\Api\AuthController::handleProviderCallbackMobileLogin'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - token
+              properties:
+                token:
+                  description: required|string
+                  type: numeric
+                  example: ya29.a0Adw1xeVd7V6JnoNL4EFAczpu6lZzfxdvAUhYYgaHperVnREcDEJGf8hxZ2e1nGbMNZPLOd5MStXfxbhp0WHkuoeXo7Y5fLu2XXtfn3E14MjYKOby6T5zcg3jJ-d_6vz17gRswGXj91lFmc6xvJI8tfnaUh2ZERIdr5GH
+                provider:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: google
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'token:':
+                    description: 'The Token'
+                    type: string
+                type: object
+        523:
+          description: invalid_credentials
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:':
+                    description: 'Provider is Not Found'
+                    type: string
+                type: object
+        524:
+          description: invalid_credentials
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:':
+                    description: 'Provider is Not Found And Email Not Found Too '
+                    type: string
+                type: object
+        400:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+  /api/social-registration:
+    post:
+      tags:
+        - Authorization
+      summary: 'User social Registration'
+      operationId: 'App\Http\Controllers\Api\AuthController::handleProviderCallbackMobileRegistration'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - token
+                - provider
+                - name
+                - phone
+                - email
+                - password
+                - password_confirmation
+              properties:
+                token:
+                  description: required|numeric
+                  type: numeric
+                  example: ya29.a0Adw1xeVd7V6JnoNL4EFAczpu6lZzfxdvAUhYYgaHperVnREcDEJGf8hxZ2e1nGbMNZPLOd5MStXfxbhp0WHkuoeXo7Y5fLu2XXtfn3E14MjYKOby6T5zcg3jJ-d_6vz17gRswGXj91lFmc6xvJI8tfnaUh2ZERIdr5GH
+                provider:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: google
+                name:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: user
+                last_name:
+                  description: 'string|max:255'
+                  type: string
+                  example: Last
+                phone:
+                  description: '[''required'',''regex:/^(5|0|3|6|4|9|1|8|7)([0-9]{7})$/'']'
+                  type: integer
+                  example: '1234567'
+                address:
+                  description: 'string|max:255'
+                  type: string
+                  example: 'Andalusia Group, 9 Mohamed Baidar St. from ElNasr St., New Maadi, Cairo, Egypt.'
+                gender:
+                  description: 'string|max:20'
+                  type: string
+                  example: 'Male,Female'
+                email:
+                  description: 'required|string|email|max:255'
+                  type: string
+                  example: user@user.com
+                password:
+                  description: 'required|string|min:6|confirmed'
+                  type: string
+                  example: '123123'
+                password_confirmation:
+                  description: 'Same As Password'
+                  type: string
+                  example: '123123'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{name,email,updated_at,created_at,id},token}':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validation.:
+                    description: Validator.
+                    type: string
+                type: object
+  /api/user:
+    get:
+      tags:
+        - Authorization
+      summary: 'User Data'
+      operationId: 'App\Http\Controllers\Api\AuthController::getAuthenticatedUser'
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{name,email,updated_at,created_at,id},token}':
+                    description: 'The Token'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/user-favorite-posts:
+    get:
+      tags:
+        - Authorization
+      summary: 'User Data'
+      operationId: 'App\Http\Controllers\Api\AuthController::getAuthenticatedPosts'
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  posts:
+                    description: 'posts Data'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/user-favorite-events:
+    get:
+      tags:
+        - Authorization
+      summary: 'User Data'
+      operationId: 'App\Http\Controllers\Api\AuthController::getAuthenticatedEvents'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  events:
+                    description: 'events Data'
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/password/link:
+    post:
+      tags:
+        - Authorization
+      summary: 'User Send link to the email'
+      operationId: 'App\Http\Controllers\Api\AuthController::reset_password_link'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+              properties:
+                email:
+                  description: 'user email'
+                  type: string
+                  example: test@example.com
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+  /api/password/reset:
+    post:
+      tags:
+        - Authorization
+      summary: 'User reset the password'
+      operationId: 'App\Http\Controllers\Api\AuthController::reset_password'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - reset_token
+                - password
+              properties:
+                reset_token:
+                  description: 'the token that has been sent to the email'
+                  type: string
+                  example: 546aa5ackandm535d5d5a5
+                password:
+                  description: 'the new password'
+                  type: string
+                  example: '123456'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+  /api/clinics:
+    get:
+      tags:
+        - 'Clinic Pages'
+      operationId: clinics
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: query_search
+          in: query
+          description: 'search in the clinics'
+          required: false
+          schema:
+            type: string
+        -
+          name: with_specialities
+          in: query
+          description: 'to search in the clinics and the specialities as well'
+          required: false
+          schema:
+            type: boolean
+        -
+          name: clinics
+          in: query
+          description: 'the clinics'
+          required: false
+          schema:
+            type: string
+          example: 'Cardia,test'
+        -
+          name: specialities
+          in: query
+          description: 'the specialities'
+          required: false
+          schema:
+            type: string
+          example: heart
+        -
+          name: gender
+          in: query
+          description: 'the gender'
+          required: false
+          schema:
+            type: string
+          example: male
+        -
+          name: all_doctors
+          in: query
+          description: 'get all doctors'
+          required: false
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        200:
+          description: 'For Home Data as [''clinics'']'
+  '/api/clinic/{slug}':
+    get:
+      tags:
+        - 'Clinic Pages'
+      operationId: clinic
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: cardiac-diseases-clinic
+      responses:
+        200:
+          description: 'For Home Data as [''clinic'']'
+        404:
+          description: 'Slug Not Found'
+  /api/clinic_requests:
+    post:
+      tags:
+        - 'Clinic Pages'
+      summary: 'User Login'
+      operationId: 'App\Http\Controllers\Api\ClinicRequestController::Index'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - first_name
+                - phone
+                - gender
+                - email
+                - clinic_id
+                - type
+                - url
+              properties:
+                first_name:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: Ahmed
+                last_name:
+                  description: 'string|max:255'
+                  type: string
+                  example: Tawfek
+                gender:
+                  description: 'required|numeric{1:Male // 2:Female}'
+                  type: string
+                  example: '1'
+                phone:
+                  description: 'required|numeric|digits:7'
+                  type: string
+                  example: '1234567'
+                email:
+                  description: 'required|string|email|max:255'
+                  type: string
+                  example: user@user.com
+                clinic_id:
+                  description: required|numeric
+                  type: integer
+                  example: '1'
+                type:
+                  description: 'required|numeric {1:Clinic Pages // 2:Doctor Page // 3:Service Page // 4:Post Page }'
+                  type: integer
+                  example: '1'
+                url:
+                  description: required|string
+                  type: string
+                  example: وحدة-قسطرة-القلب
+                further_requirements:
+                  description: string
+                  type: string
+                  example: ' I want to contact me as soon as possible '
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'Sent Successfully'
+                    type: string
+                type: object
+        400:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+  /api/contact_us:
+    post:
+      tags:
+        - 'Contact Us'
+      summary: 'add new reqoust to ContactUs'
+      operationId: 'App\Http\Controllers\Api\ClinicRequestController::addContactUs'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - first_name
+                - email
+                - further_requirements
+              properties:
+                first_name:
+                  description: 'required|string|max:255'
+                  type: string
+                  example: Ahmed
+                email:
+                  description: 'required|string|email|max:255'
+                  type: string
+                  example: user@user.com
+                further_requirements:
+                  description: string
+                  type: string
+                  example: ' I want to contact me as soon as possible '
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'Sent Successfully'
+                    type: string
+                type: object
+        400:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+  /api/doctors:
+    get:
+      tags:
+        - 'Doctor Pages'
+      operationId: doctors
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: query_search
+          in: query
+          description: 'search in the doctors'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 'For Home Data as [''doctors'']'
+  '/api/doctor/{slug}':
+    get:
+      tags:
+        - 'Doctor Pages'
+      operationId: doctor
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: dr-eman-abdel-aziz
+      responses:
+        200:
+          description: 'For Home Data as [''doctor'']'
+        404:
+          description: 'Slug Not Found'
+  /api/events:
+    get:
+      tags:
+        - 'Event Pages'
+      operationId: events
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''event'']'
+  '/api/event/{slug}':
+    get:
+      tags:
+        - 'Event Pages'
+      operationId: event
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: cardiac-diseases-event
+      responses:
+        200:
+          description: 'For Home Data as [''event'']'
+        404:
+          description: 'Slug Not Found'
+  /api/event-user:
+    post:
+      tags:
+        - 'Event Pages'
+      summary: 'User Events'
+      operationId: 'App\Http\Controllers\Api\EventController::eventUserAction'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - event_id
+              properties:
+                event_id:
+                  description: required|numeric
+                  type: string
+                  example: '1'
+              type: object
+      responses:
+        200:
+          description: 'event successfully removed form your favorite list :('
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'event successfully removed'
+                    type: string
+                type: object
+        201:
+          description: 'event successfully added to your favorite list :)'
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'event successfully added '
+                    type: string
+                type: object
+        404:
+          description: user_not_found
+          content:
+            application/json:
+              schema:
+                properties:
+                  user_not_found:
+                    description: user_not_found
+                    type: string
+                type: object
+        400:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/favorite-user:
+    post:
+      tags:
+        - 'Post Pages'
+      summary: 'Favorite Button'
+      operationId: 'App\Http\Controllers\Api\FavoriteController::index'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - post_id
+              properties:
+                post_id:
+                  description: required|numeric
+                  type: string
+                  example: '6'
+              type: object
+      responses:
+        200:
+          description: 'Post successfully removed form your favorite list :('
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'Post successfully removed'
+                    type: string
+                type: object
+        201:
+          description: 'Post successfully added to your favorite list :)'
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'Post successfully added '
+                    type: string
+                type: object
+        404:
+          description: user_not_found
+          content:
+            application/json:
+              schema:
+                properties:
+                  user_not_found:
+                    description: user_not_found
+                    type: string
+                type: object
+        400:
+          description: Validator
+          content:
+            application/json:
+              schema:
+                properties:
+                  Validator.:
+                    description: Validator
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/appointments/files:
+    post:
+      tags:
+        - 'appointments files'
+      summary: 'endpoint for upload files '
+      operationId: 'App\Http\Controllers\Api\FilesController::filesUpload'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                'attachments[]':
+                  description: 'attachments[]'
+                  type: file
+                  items:
+                    type: string
+                    format: binary
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '':
+                    description: 'file download path'
+                    type: string
+                type: object
+        400:
+          description: 'the array files of attachments not found'
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:':
+                    description: 'the array files of attachments  not found'
+                    type: string
+                type: object
+  '/api/appointments/files/{fileName}':
+    post:
+      tags:
+        - 'appointments files'
+      summary: 'download a appointments files'
+      operationId: 'App\Http\Controllers\Api\FilesController::filesDownload'
+      responses:
+        201:
+          description: Success
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:the file not supotrted for view. OR the file not exists .OR the File Name not found ':
+                    description: 'the file not supotrted for view'
+                    type: string
+                type: object
+  /api/settings:
+    get:
+      tags:
+        - 'Home Page'
+      operationId: getRepositoriesByOwner
+      responses:
+        200:
+          description: 'For Home Data as [''events'', ''menus'', ''posts'']'
+  /api/home:
+    get:
+      tags:
+        - 'Home Page'
+      operationId: getRepositoriesByOwner
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''settings'', ''menus'', ''sliders'', ''clinics'', ''services'', ''doctors'', ''posts'',''events'',''andlusia_group'']'
+  /api/create_conversation:
+    post:
+      tags:
+        - Chat
+      summary: 'User Update Profile Password'
+      operationId: 'App\Http\Controllers\Api\MassageController::GetOrCreateConversation'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - appointment_id
+              properties:
+                appointment_id:
+                  description: required
+                  type: string
+                  example: '2'
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/send_message:
+    post:
+      tags:
+        - Chat
+      summary: 'User Update Profile Password'
+      operationId: 'App\Http\Controllers\Api\MassageController::send_message'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - message
+                - conversation_id
+              properties:
+                message:
+                  description: required
+                  type: string
+                  example: 'Ahmed Tawfek'
+                conversation_id:
+                  description: required
+                  type: string
+                  example: 1
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/delete_message:
+    post:
+      tags:
+        - Chat
+      summary: 'Delete Message'
+      operationId: 'App\Http\Controllers\Api\MassageController::delete_message'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - message_id
+              properties:
+                message_id:
+                  description: required
+                  type: string
+                  example: 1
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/get_conversation:
+    post:
+      tags:
+        - Chat
+      summary: Conversation
+      operationId: 'App\Http\Controllers\Api\MassageController::get_conversation'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - conversation_id
+              properties:
+                conversation_id:
+                  description: required
+                  type: string
+                  example: 1
+                offset:
+                  description: required
+                  type: string
+                  example: 0
+                take:
+                  description: required
+                  type: string
+                  example: 20
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/makeseen:
+    post:
+      tags:
+        - Chat
+      summary: makeseen
+      operationId: 'App\Http\Controllers\Api\MassageController::makeSeen'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - message_id
+              properties:
+                message_id:
+                  description: required
+                  type: string
+                  example: 1
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/checknewmessage:
+    post:
+      tags:
+        - Chat
+      summary: makeseen
+      operationId: 'App\Http\Controllers\Api\MassageController::checknewmessage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - message_id
+              properties:
+                message_id:
+                  description: required
+                  type: string
+                  example: 1
+              type: object
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  '{user{data}':
+                    description: User
+                    type: string
+                type: object
+        400:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:These credentials do not match our records.':
+                    description: 'These credentials do not match our records.'
+                    type: string
+                type: object
+      security:
+        -
+          bearerAuth: {  }
+  /api/pages:
+    get:
+      tags:
+        - Pages
+      operationId: clinics
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''pages'']'
+  '/api/Page/{slug}':
+    get:
+      tags:
+        - Pages
+      operationId: page
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: hello-world
+      responses:
+        200:
+          description: 'For  Data as [''page'']'
+        404:
+          description: 'Slug Not Found'
+  /api/posts:
+    get:
+      tags:
+        - 'Post Pages'
+      operationId: posts
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''posts'']'
+  '/api/post/{slug}':
+    get:
+      tags:
+        - 'Post Pages'
+      operationId: post
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: cardiac-diseases-clinic
+      responses:
+        200:
+          description: 'For Home Data as [''post'']'
+        404:
+          description: 'Slug Not Found'
+  /api/categories:
+    get:
+      tags:
+        - 'Post Pages'
+      operationId: categories
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''categories'']'
+  '/api/category/{slug}':
+    get:
+      tags:
+        - 'Post Pages'
+      operationId: category
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: category-1
+      responses:
+        200:
+          description: 'For Home Data as [''Category'']'
+        404:
+          description: 'Slug Not Found'
+  /api/tags:
+    get:
+      tags:
+        - 'Post Pages'
+      operationId: tags
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''tags'']'
+  '/api/tag/{slug}':
+    get:
+      tags:
+        - 'Post Pages'
+      operationId: tag
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: أسباب-التشوهات-الخلقية-عند-الجنين
+      responses:
+        200:
+          description: 'For Home Data as [''Slug'']'
+        404:
+          description: 'Slug Not Found'
+  /api/privacy:
+    get:
+      tags:
+        - 'Privacy Setting'
+      summary: 'get all the privacy'
+      operationId: 'App\Http\Controllers\Api\PrivacyController::index'
+      responses:
+        200:
+          description: 'get all the privacy'
+  /api/seo:
+    get:
+      tags:
+        - 'Seo Setting'
+      operationId: Seo
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''Seo'']'
+  /api/services:
+    get:
+      tags:
+        - 'Service Pages'
+      operationId: services
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+      responses:
+        200:
+          description: 'For Home Data as [''services'']'
+  '/api/service/{slug}':
+    get:
+      tags:
+        - 'Service Pages'
+      operationId: service
+      parameters:
+        -
+          name: lang
+          in: query
+          description: Lang
+          required: true
+          schema:
+            type: string
+            example: ar
+        -
+          name: slug
+          in: path
+          description: Slug
+          required: true
+          schema:
+            type: string
+            example: وحدة-قسطرة-القلب
+      responses:
+        200:
+          description: 'For Home Data as [''service'']'
+        404:
+          description: 'Slug Not Found'
+  /api/specialities:
+    get:
+      tags:
+        - Speciality
+      summary: 'Speciality service'
+      operationId: 'App\Http\Controllers\Api\SpecialityController::index'
+      parameters:
+        -
+          name: query_search
+          in: query
+          description: 'search in the speciality'
+          required: false
+          schema:
+            type: integer
+        -
+          name: with_doctors
+          in: query
+          description: 'to search in the specialities and the doctors as well'
+          required: false
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/specialities/{id}':
+    get:
+      tags:
+        - Speciality
+      summary: 'Speciality service'
+      operationId: 'App\Http\Controllers\Api\SpecialityController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'speciality id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/appointments/{id}':
+    get:
+      tags:
+        - Appointment
+      summary: 'Appointment service'
+      operationId: 'Andalusia\Booking\Controllers\API\AppointmentController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'appointment id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/bookings:
+    get:
+      tags:
+        - Booking
+      summary: 'Booking service'
+      operationId: 'Andalusia\Booking\Controllers\API\BookingController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+        -
+          name: calender
+          in: query
+          description: 'to get the data as in the fullcalendar.io'
+          required: false
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - Booking
+      summary: 'Booking service'
+      operationId: 'Andalusia\Booking\Controllers\API\BookingController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - appointment_id
+                - date
+              properties:
+                appointment_id:
+                  description: 'the appointment id'
+                  type: integer
+                  example: '1'
+                patient_name:
+                  description: 'patient name ... required if the use is not authenticated'
+                  type: string
+                  example: Khaled
+                date:
+                  description: 'the booking date ... date format is: Y-m-d'
+                  type: string
+                  example: '2020-04-09'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/bookings/{id}':
+    get:
+      tags:
+        - Booking
+      summary: 'Booking service'
+      operationId: 'Andalusia\Booking\Controllers\API\BookingController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'booking id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    delete:
+      tags:
+        - Booking
+      summary: 'Booking service'
+      operationId: 'Andalusia\Booking\Controllers\API\BookingController::destroy'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'booking id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/notifications:
+    get:
+      tags:
+        - Notification
+      summary: 'Notification service'
+      operationId: 'Andalusia\Notification\Controllers\API\MainController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - Notification
+      summary: 'Notification service'
+      operationId: 'Andalusia\Notification\Controllers\API\MainController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - link
+                - message
+                - type
+              properties:
+                image:
+                  description: 'an image'
+                  type: file
+                  example: image.png
+                thumbnail:
+                  description: 'a thumbnail'
+                  type: file
+                  example: thumbnail.png
+                link:
+                  description: 'the link to the notification'
+                  type: string
+                  example: 'http://www.andalusiagroup.net/'
+                message:
+                  description: 'the message that will be displayed to the user'
+                  type: string
+                  example: 'special offer for you!'
+                type:
+                  description: 'is this notification is just a normal notification or it''s an offer notification?'
+                  type: string
+                  enum:
+                    - normal
+                    - offer
+                  example: offer
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/notifications/{id}':
+    get:
+      tags:
+        - Notification
+      summary: 'Notification service'
+      operationId: 'Andalusia\Notification\Controllers\API\MainController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'notification id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    put:
+      tags:
+        - Notification
+      summary: 'Notification service'
+      operationId: 'Andalusia\Notification\Controllers\API\MainController::update'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'notification id'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required: {  }
+              properties:
+                image:
+                  description: 'an image'
+                  type: file
+                  example: image.png
+                thumbnail:
+                  description: 'a thumbnail'
+                  type: file
+                  example: thumbnail.png
+                link:
+                  description: 'the link to the notification'
+                  type: string
+                  example: 'http://www.andalusiagroup.net/'
+                message:
+                  description: 'the message that will be displayed to the user'
+                  type: string
+                  example: 'special offer for you!'
+                type:
+                  description: 'is this notification is just a normal notification or it''s an offer notification?'
+                  type: string
+                  enum:
+                    - normal
+                    - offer
+                  example: offer
+                is_read:
+                  description: 'mark the notification as read ... note that: to mark the notification as read you have to send this property only and don''t include other properties'
+                  type: boolean
+                  enum:
+                    - 1
+                    - true
+                  example: '1'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    delete:
+      tags:
+        - Notification
+      summary: 'Notification service'
+      operationId: 'Andalusia\Notification\Controllers\API\MainController::destroy'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'notification id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/surveys_answers:
+    get:
+      tags:
+        - 'Survey Answer'
+      summary: 'Survey Question Answers service'
+      operationId: 'Andalusia\Survey\Controllers\API\AnswerController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    put:
+      tags:
+        - 'Survey Answer'
+      summary: 'Survey Question Answers service'
+      operationId: 'Andalusia\Survey\Controllers\API\AnswerController::update'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - question_id
+                - answer
+              properties:
+                question_id:
+                  description: 'question id'
+                  type: integer
+                  example: '1'
+                order:
+                  description: 'the order of the answer'
+                  type: integer
+                  example: '3'
+                answer:
+                  description: 'the answer of the question'
+                  type: string
+                  example: football
+                points:
+                  description: 'to add points to the answer'
+                  type: integer
+                  example: '20'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - 'Survey Answer'
+      summary: 'Survey Question Answers service'
+      operationId: 'Andalusia\Survey\Controllers\API\AnswerController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - question_id
+                - answer
+              properties:
+                question_id:
+                  description: 'question id'
+                  type: integer
+                  example: '1'
+                order:
+                  description: 'the order of the answer'
+                  type: integer
+                  example: '3'
+                answer:
+                  description: 'the answer of the question'
+                  type: string
+                  example: football
+                points:
+                  description: 'to add points to the answer'
+                  type: integer
+                  example: '20'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/surveys_answers/{id}':
+    get:
+      tags:
+        - 'Survey Answer'
+      summary: 'Survey Question Answers service'
+      operationId: 'Andalusia\Survey\Controllers\API\AnswerController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'answer id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    delete:
+      tags:
+        - 'Survey Answer'
+      summary: 'Survey Question Answers service'
+      operationId: 'Andalusia\Survey\Controllers\API\AnswerController::destroy'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'answer id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/surveys:
+    get:
+      tags:
+        - Survey
+      summary: 'Survey service'
+      operationId: 'Andalusia\Survey\Controllers\API\MainController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - Survey
+      summary: 'Survey service'
+      operationId: 'Andalusia\Survey\Controllers\API\MainController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - same_page
+                - popup_type
+                - popup_timer
+                - number_of_questions_on_page
+                - slug
+                - note
+                - redirect_link
+              properties:
+                same_page:
+                  description: 'will the survey be on the same page or in another page? (if same_page=false you will have to send the slug property)'
+                  type: boolean
+                  example: 'true'
+                popup_type:
+                  description: 'popup type'
+                  type: string
+                  enum:
+                    - small
+                    - big
+                  example: small
+                popup_timer:
+                  description: 'popup_timer will be in minutes ... popup will be closed automatically after the timer is out'
+                  type: integer
+                  example: '1'
+                email:
+                  description: 'user email'
+                  type: string
+                  example: test@example.com
+                phone:
+                  description: 'user phone'
+                  type: string
+                  example: '0123456789'
+                number_of_questions_on_page:
+                  description: 'to specify the number of questions if the popup_type is small'
+                  type: integer
+                  example: '10'
+                slug:
+                  description: slug
+                  type: string
+                  example: user-satisfaction
+                note:
+                  description: note
+                  type: string
+                  example: 'thank you note'
+                redirect_link:
+                  description: 'redirect link'
+                  type: string
+                  example: example.com
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/surveys/{id}':
+    get:
+      tags:
+        - Survey
+      summary: 'Survey service'
+      operationId: 'Andalusia\Survey\Controllers\API\MainController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'survey id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    put:
+      tags:
+        - Survey
+      summary: 'Survey service'
+      operationId: 'Andalusia\Survey\Controllers\API\MainController::update'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'survey id'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - same_page
+                - popup_type
+                - popup_timer
+                - number_of_questions_on_page
+                - slug
+                - note
+                - redirect_link
+              properties:
+                same_page:
+                  description: 'will the survey be on the same page or in another page? (if same_page=false you will have to send the slug property)'
+                  type: boolean
+                  example: 'true'
+                popup_type:
+                  description: 'popup type'
+                  type: string
+                  enum:
+                    - small
+                    - big
+                  example: small
+                popup_timer:
+                  description: 'popup_timer will be in minutes ... popup will be closed automatically after the timer is out'
+                  type: integer
+                  example: '1'
+                email:
+                  description: 'user email'
+                  type: string
+                  example: test@example.com
+                phone:
+                  description: 'user phone'
+                  type: string
+                  example: '0123456789'
+                number_of_questions_on_page:
+                  description: 'to specify the number of questions if the popup_type is small'
+                  type: integer
+                  example: '10'
+                slug:
+                  description: slug
+                  type: string
+                  example: user-satisfaction
+                note:
+                  description: note
+                  type: string
+                  example: 'thank you note'
+                redirect_link:
+                  description: 'redirect link'
+                  type: string
+                  example: example.com
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    delete:
+      tags:
+        - Survey
+      summary: 'Survey service'
+      operationId: 'Andalusia\Survey\Controllers\API\MainController::destroy'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'survey id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/surveys_questions:
+    get:
+      tags:
+        - 'Survey Question'
+      summary: 'Survey Question service'
+      operationId: 'Andalusia\Survey\Controllers\API\QuestionController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    put:
+      tags:
+        - 'Survey Question'
+      summary: 'Survey Question service'
+      operationId: 'Andalusia\Survey\Controllers\API\QuestionController::update'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - question
+                - form_type
+              properties:
+                survey_id:
+                  description: 'survey id'
+                  type: integer
+                  example: '1'
+                order:
+                  description: 'the order of the question'
+                  type: integer
+                  example: '3'
+                question:
+                  description: 'the question'
+                  type: string
+                  example: 'What are your favorite sports?'
+                form_type:
+                  description: 'the type of the form that will be displayed to the user when answering the questions'
+                  type: string
+                  enum:
+                    - text
+                    - textarea
+                    - menu
+                    - checkbox
+                    - radio
+                  example: checkbox
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - 'Survey Question'
+      summary: 'Survey Question service'
+      operationId: 'Andalusia\Survey\Controllers\API\QuestionController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - survey_id
+                - question
+                - form_type
+              properties:
+                survey_id:
+                  description: 'survey id'
+                  type: integer
+                  example: '1'
+                order:
+                  description: 'the order of the question'
+                  type: integer
+                  example: '3'
+                question:
+                  description: 'the question'
+                  type: string
+                  example: 'What are your favorite sports?'
+                form_type:
+                  description: 'the type of the form that will be displayed to the user when answering the questions'
+                  type: string
+                  enum:
+                    - text
+                    - textarea
+                    - menu
+                    - checkbox
+                    - radio
+                  example: checkbox
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/surveys_questions/{id}':
+    get:
+      tags:
+        - 'Survey Question'
+      summary: 'Survey Question service'
+      operationId: 'Andalusia\Survey\Controllers\API\QuestionController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'question id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    delete:
+      tags:
+        - 'Survey Question'
+      summary: 'Survey Question service'
+      operationId: 'Andalusia\Survey\Controllers\API\QuestionController::destroy'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'question id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/surveys_users_answers:
+    get:
+      tags:
+        - 'Survey User Answer'
+      summary: 'Survey User Answer service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserAnswerController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    put:
+      tags:
+        - 'Survey User Answer'
+      summary: 'Survey User Answer service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserAnswerController::update'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - user_info_id
+              properties:
+                user_info_id:
+                  description: 'survey user info id'
+                  type: integer
+                  example: '1'
+                answer_id:
+                  description: 'the answer id ... required if the answer allowed neither text nor textarea'
+                  type: integer
+                  example: '3'
+                answer_text:
+                  description: 'to let the user type his/her own answer ... required if the answer allowed is text or textarea'
+                  type: string
+                  example: 'my name is example!'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - 'Survey User Answer'
+      summary: 'Survey User Answer service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserAnswerController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - answers
+              properties:
+                survey_id:
+                  description: 'survey id ... required when an auth user submits the survey'
+                  type: integer
+                  example: 5
+                user_info_id:
+                  description: 'survey user info id ... required when a guest user submits the survey'
+                  type: integer
+                  example: 100
+                answers:
+                  description: 'the user/guest answers'
+                  type: array
+                  items:
+                    properties:
+                      answer_id:
+                        description: 'the answer id ... required if the answer allowed neither text nor textarea'
+                        type: integer
+                        example: 3
+                      answer_text:
+                        description: 'to let the user type his/her own answer ... required if the answer allowed is text or textarea'
+                        type: string
+                        example: 'my name is example!'
+                    type: object
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/surveys_users_answers/{id}':
+    get:
+      tags:
+        - 'Survey User Answer'
+      summary: 'Survey User Answer service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserAnswerController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'user answer id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    delete:
+      tags:
+        - 'Survey User Answer'
+      summary: 'Survey User Answer service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserAnswerController::destroy'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'user answer id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  /api/surveys_users_info:
+    get:
+      tags:
+        - 'Survey User Info'
+      summary: 'Survey User Info service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserInfoController::index'
+      parameters:
+        -
+          name: paginate
+          in: query
+          description: 'pagination ... minimum is 1 & maximum is 1000'
+          required: false
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    put:
+      tags:
+        - 'Survey User Info'
+      summary: 'Survey User Info service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserInfoController::update'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - survey_id
+                - email
+                - phone
+                - is_survey_closed
+              properties:
+                survey_id:
+                  description: 'survey id'
+                  type: integer
+                  example: '1'
+                email:
+                  description: 'the email of the user'
+                  type: string
+                  example: test@example.com
+                phone:
+                  description: 'the phone number of the user'
+                  type: integer
+                  example: '0123456789'
+                is_survey_closed:
+                  description: 'to specify if the user closed the survey without answers or not'
+                  type: boolean
+                  example: 'true'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    post:
+      tags:
+        - 'Survey User Info'
+      summary: 'Survey User Info service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserInfoController::store'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - survey_id
+                - email
+                - phone
+              properties:
+                survey_id:
+                  description: 'survey id'
+                  type: integer
+                  example: '1'
+                email:
+                  description: 'the email of the user'
+                  type: string
+                  example: test@example.com
+                phone:
+                  description: 'the phone number of the user'
+                  type: integer
+                  example: '0123456789'
+              type: object
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+  '/api/surveys_users_info/{id}':
+    get:
+      tags:
+        - 'Survey User Info'
+      summary: 'Survey User Info service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserInfoController::show'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'user info id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+    delete:
+      tags:
+        - 'Survey User Info'
+      summary: 'Survey User Info service'
+      operationId: 'Andalusia\Survey\Controllers\API\UserInfoController::destroy'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'user info id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  'success:':
+                    description: 'successful action.'
+                    type: string
+                type: object
+        400:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                properties:
+                  'error:there is an error.':
+                    description: 'there is an error.'
+                    type: string
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: bearerAuth
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
