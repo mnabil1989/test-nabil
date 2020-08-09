@@ -1,0 +1,61 @@
+<div class="second-section">
+      <div class="title-container">
+        <h1>{{$t('hjh-name')}}</h1>
+      </div>
+      <div class="content-container">
+        <p class="main-content">
+          تأسست في جدة عام 1984 على يد مالكها د. درويش مصطفى زقزوق، ثم أصبحت
+          رائدة في تقديم الرعاية الطبية في المملكة، واستطاعت المستشفى أن تستحوذ
+          على ثقة عملائها كأفضل مستشفى في جدة، وخلال عامين فقط تم مضاعفة سعة
+          المستشفى بزيادة عدد السرائر والعيادات وغرف العمليات والولادة، ونسعى
+          دائماً لتوفير أفضل طرق العناية بصحة مرضانا والتطور المستمر لتقديم أفضل
+          مستويات الخدمات الطبية
+        </p>
+      </div>
+    </div>
+    <div class="third-section figures-container">
+      <div class="square square-one"></div>
+      <div class="square square-two"></div>
+      <div class="square square-three"></div>
+    </div>
+    <div class="fourth-section">
+      <div class="img-container">
+        <img src="@/assets/img/doctor-shortage.jpg" alt="doctor-shortage"/>
+      </div>
+      <div class="text-container title-container">
+        <h2>مجموعة أندلسية للخدمات الطبية</h2>
+      </div>
+      <div class="text-container content-container">
+        <p>
+          إحدى المؤسسات الرائدة في مجال الرعاية الصحية في الشرق الأوسط، والتي
+          تضم مجموعة مميزة من المستشفيات العامة والمراكز الطبية المتخصصة وعدد من
+          العيادات المتنوعة في مصر والسعودية .استطاعت أندلسية منذ بدايتها عام
+          1984 في جدة بالسعودية، وبفضل د. درويش زقزوق أن تضع بصمتها الفريدة في
+          تقديم رعاية وخدمات متميزة .وتوسعت خلال أكثر من 34 عامًا لتصبح مجموعة
+          متكاملة للخدمات الطبية في السعودية ومصر
+        </p>
+      </div>
+    </div>
+
+    <div class="fifth-section">
+      <div class="title-container center">اتصل بنا</div>
+      <div class="address-icon-container">
+        <div class="address-container">
+          <ul>
+            <li>العنوان</li>
+            <li>حي الجامعة - شارع السيرة العطرة</li>
+            <li>البريد الالكتروني</li>
+            <li>hjh.info@andulasiagroup.net</li>
+            <li>الهاتف</li>
+            <li>0126806666</li>
+            <li>رقم الهاتف</li>
+            <li>6803380</li>
+          </ul>
+        </div>
+        <div class="icon-container">
+          <span>
+            <i class="fas fa-phone-alt"></i>
+          </span>
+        </div>
+      </div>
+    </div>

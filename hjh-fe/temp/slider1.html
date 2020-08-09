@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="slider1.css">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <div class="circle">
+        <div class="dots"></div>
+        <div class="featured"></div>
+    </div> -->
+    <div id="test">1</div>
+    <div id="wrapper">
+        <div id='container'>
+            <div id="dot1"></div>
+            <div id='slider'> 
+
+            </div>
+            <div id="dot2"></div>
+            <div id="dot3"></div>
+            <div id="dot4"></div>
+            <div id="dot5"></div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+    var current = 120;
+
+
+(function () {
+        var $container = $('#container');
+        var $slider = $('#slider');
+        var $dot1 = $('#dot1');
+        var $dot2 = $('#dot2');
+        var $dot3 = $('#dot3');
+        var $dot4 = $('#dot4');
+        var $dot5 = $('#dot5');
+        var sliderW2 = $slider.width()/2;
+        var sliderH2 = $slider.height()/2;    
+        var radius = 300;
+        var deg = 0;    
+        var elP = $('#container').offset();
+        // console.log(elP);
+        
+        var elPos = { x: elP.left, y: elP.top};
+        var X = 0, Y = 0;
+        var mdown = false;
+        // $('#container').on('touchstart',function (e) {
+        //     mdown = true;
+        // })
+        $('#container')
+        .mousedown(function (e) { mdown = true; })
+        .mouseup(function (e) { mdown = false; })
+        .mouseenter()
+        .mousemove(function (e) {
+            if (mdown) {
+               var mPos = {x: e.clientX-elPos.x, y: e.clientY-elPos.y};
+               
+               var atan = Math.atan2(mPos.x-radius, mPos.y-radius);
+               
+               deg = -atan/(Math.PI/180) + 180; // final (0-360 positive) degrees from mouse position 
+               deg1 = deg - 60; //before
+               deg2 = deg + 60;  //after
+               deg3 = deg + 120;  
+               deg4 = deg + 180;  
+               deg5 = deg + 240;  
+                
+               
+               
+               X = Math.round(radius* Math.sin(deg*Math.PI/180));
+               Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
+               X1 = Math.round(radius* Math.sin(deg1*Math.PI/180));
+               Y1 = Math.round(radius*  -Math.cos(deg1*Math.PI/180));
+               X2 = Math.round(radius* Math.sin(deg2*Math.PI/180));
+               Y2 = Math.round(radius*  -Math.cos(deg2*Math.PI/180));
+               X3 = Math.round(radius* Math.sin(deg3*Math.PI/180));
+               Y3 = Math.round(radius*  -Math.cos(deg3*Math.PI/180));
+               X4 = Math.round(radius* Math.sin(deg4*Math.PI/180));
+               Y4 = Math.round(radius*  -Math.cos(deg4*Math.PI/180));
+               X5 = Math.round(radius* Math.sin(deg5*Math.PI/180));
+               Y5 = Math.round(radius*  -Math.cos(deg5*Math.PI/180));
+               
+               
+                var multiplier = 4; // change this to adjust the size of the main image
+
+
+                // main image circle size controller
+               var acos =  Math.acosh(X-240, Y)*multiplier || 1;
+               var acos1 = Math.acosh(X1-240, Y1)*multiplier || 1;
+               var acos2 = Math.acosh(X2-240, Y2)*multiplier || 1;
+               var acos3 = Math.acosh(X3-240, Y3)*multiplier || 1;
+               var acos4 = Math.acosh(X4-240, Y4)*multiplier || 1;
+               var acos5 = Math.acosh(X5-240, Y5)*multiplier || 1;
+               
+               console.log(Math.abs(acos)/18);
+               
+
+
+                // adjust the elements to be on the circle -12
+                $dot1.css({ left: X1+radius-sliderW2, top: Y1+radius-sliderH2 });
+                $slider.css({ left: X+radius-sliderW2, top: Y+radius-12-sliderH2 });
+                $dot2.css({ left: X2+radius-sliderW2, top: Y2+radius-24-sliderH2 });
+                $dot3.css({ left: X3+radius-sliderW2, top: Y3+radius-36-sliderH2 });
+                $dot4.css({ left: X4+radius-sliderW2, top: Y4+radius-48-sliderH2 });
+                $dot5.css({ left: X5+radius-sliderW2, top: Y5+radius-60-sliderH2 });
+
+               
+                // AND FINALLY apply exact degrees to ball rotation
+                // change the background here to get solid
+                $slider.css({ 'transform': 'rotate(' + deg + 'deg)'
+                , 'transform':'scale('+Math.abs(acos)+')'
+                , 'border' : ''+1/Math.abs(acos)+'px #008000 solid'
+                });
+                $dot1.css({ 'transform': 'rotate(' + deg + 'deg)'
+                , 'transform':'scale('+Math.abs(acos1)+')'
+                });
+                $dot2.css({ 'transform': 'rotate(' + deg + 'deg)'
+                , 'transform':'scale('+Math.abs(acos2)+')'
+                });
+                $dot3.css({ 'transform': 'rotate(' + deg + 'deg)'
+                , 'transform':'scale('+Math.abs(acos3)+')'
+                });
+                $dot4.css({ 'transform': 'rotate(' + deg + 'deg)'
+                , 'transform':'scale('+Math.abs(acos4)+')'
+                });
+                $dot5.css({ 'transform': 'rotate(' + deg + 'deg)'
+                , 'transform':'scale('+Math.abs(acos5)+')'
+                });
+
+            }
+        });
+})();
+</script>
+</body>
+</html>
