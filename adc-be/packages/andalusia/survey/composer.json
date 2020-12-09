@@ -1,0 +1,12 @@
+{
+  "name": "andalusia/survey",
+  "description": "it's the survey package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mahmood Ahmad",
+      "email": "mahmood073@gmail.com"
+    }
+  ],
+  "require": {}
+}
